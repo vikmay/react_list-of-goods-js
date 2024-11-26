@@ -21,14 +21,13 @@ export const App = () => {
   const [visibleGoods, setVisibleGoods] = useState(goodsFromServer);
   const [activeButton, setActiveButton] = useState(null);
   const [isReversed, setIsReversed] = useState(false);
+  const sorted = [...visibleGoods];
 
   const sortAlph = () => {
-    const sorted = [...visibleGoods];
-
     if (isReversed) {
-      sorted.sort().reverse();
+      sorted.sort((a, b) => b.localeCompare(a));
     } else {
-      sorted.sort();
+      sorted.sort((a, b) => a.localeCompare(b));
     }
 
     setVisibleGoods(sorted);
@@ -36,8 +35,6 @@ export const App = () => {
   };
 
   const sortLength = () => {
-    const sorted = [...visibleGoods];
-
     if (isReversed) {
       sorted.sort((a, b) => b.length - a.length);
     } else {
@@ -88,13 +85,13 @@ export const App = () => {
           onClick={reverse}
           type="button"
           className={cn('button is-warning', {
-            'is-light': isReversed === false,
+            'is-light': !isReversed,
           })}
         >
           Reverse
         </button>
 
-        {activeButton !== null || isReversed ? (
+        {(activeButton || isReversed) && (
           <button
             onClick={reset}
             type="button"
@@ -102,7 +99,7 @@ export const App = () => {
           >
             Reset
           </button>
-        ) : null}
+        )}
       </div>
 
       <ul>
